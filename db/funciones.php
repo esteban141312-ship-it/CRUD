@@ -1,88 +1,75 @@
 <?php
-function obtener_usuarios(){
-    try{
+
+function obtener_usuarios()
+{
+    try {
         require "conexion.php";
-        $sql = "SELECT * FROM usuario";
+        $sql = "SELECT * FROM usuarios";
         $query = mysqli_query($conex, $sql);
-        
+
         return $query;
-    }catch(\Throwable $th){
+    } catch (\Throwable $th) {
         var_dump($th);
     }
 }
 
-function insertar_usuario($nombre, $apellido){
-    try{
+
+function create_user()
+{
+    if (isset($_POST['agregar'])) {
+
         require "conexion.php";
-        $sql = "INSERT INTO usuario (nombre, apellido) VALUES ('$nombre', '$apellido');";
-        $query = mysqli_query($conex, $sql);
-        
-        return $query;
-    }catch(\Throwable $th){
-        var_dump($th);
-    }
-}
 
-function create_user(){
-    require 'conexion.php';               
-    $errores = [];
-    $nombre = "";
-    $apellido = "";
-    $cedula = "";
-    $correo = "";
-    $telefono = "";
-    $contraseña = "";
-    $confcontraseña = "";
+        $nombre = $_POST["nombre"];
+        $apellido = $_POST["apellido"];
+        $cedula = $_POST["cedula"];
+        $correo = $_POST["correo"];
+        $telefono = $_POST["telefono"];
+        $contraseña = $_POST["contraseña"];
+        $comprobacion = $_POST["confcontraseña"];
 
-    if (isset($_POST['agregar'])){
-        $nombre = $_POST['nombre'] ?? '';
-        $apellido = $_POST['apellido'] ?? '';
-        $cedula = $_POST['cedula'] ?? '';
-        $correo = $_POST['correo'] ?? '';
-        $telefono = $_POST['telefono'] ?? '';
-        $contraseña = $_POST['contraseña'] ?? '';
-        $confcontraseña = $_POST['confcontraseña'] ?? '';
+        $errores = [];
 
-        if (!$cedula){
-            $errores[] = "ingrese el numero de cedula"; 
+        if (!$cedula) {
+            $errores[] = "Ingrese el numero de cedula";
         }
-        if (!$nombre){
-            $errores[] = "ingrese un nombre"; 
+
+        if (!$nombre) {
+            $errores[] = "Ingrese un nombre";
         }
-        if (!$apellido){
-            $errores[] = "ingrese el apellido"; 
+
+        if (!$apellido) {
+            $errores[] = "Ingrese el apellido";
         }
-        if (!$correo){
-            $errores[] = "ingrese el correo"; 
+
+        if (!$correo) {
+            $errores[] = "Ingrese el correo";
         }
-        if (!$telefono){
-            $errores[] = "ingrese el numero de telefono"; 
+
+        if (!$telefono) {
+            $errores[] = "Ingrese el numero de telefono";
         }
-        if (!$contraseña){
-            $errores[] = "ingrese la contraseña"; 
+
+        if (!$contraseña) {
+            $errores[] = "Ingrese la contraseña";
         }
-        if ($contraseña != $confcontraseña){
-            $errores[] = "las contraseñas no coinciden"; 
+
+        if ($contraseña != $comprobacion) {
+            $errores[] = "Las contraseñas no coinciden";
         } else {
             $contraseña = password_hash($contraseña, PASSWORD_BCRYPT);
         }
 
-        $query = "SELECT * FROM usuario WHERE cedula = '" . $cedula . "';";
-        $resultado = mysqli_query($conex, $query);
-        // echo '<pre>';
-        // var_dump($resultado);
-        // echo '</pre>';
-        // exit;
-        if($resultado && $resultado->num_rows > 0){
-            $errores[] = "el usuario ya existe";
-        }
-        
-        if (empty($errores)){
-            $query = "INSERT INTO usuario (cedula, nombre, apellido, correo, contraseña, telefono) VALUES ('".
-            $cedula. "', '" .$nombre. "', '" .$apellido. "', '" .$correo. "', '" .$contraseña. "', '" .$telefono. "');";
-            $insertar = mysqli_query($conex, $query);
+        if (empty($errores)) {
 
-            if($insertar){
+            $sql = "INSERT INTO usuarios 
+            (cedula, nombre, apellido, correo, contraseña, celular) 
+            VALUES 
+            ('$cedula', '$nombre', '$apellido', '$correo', '$contraseña', '$telefono')";
+
+            $query = mysqli_query($conex, $sql);
+
+            if ($query) {
                 header("Location: index.php");
                 exit;
             }
@@ -90,14 +77,9 @@ function create_user(){
             return $errores;
         }
     }
-    return $errores;
 }
 
 // $resultado = mysqli_query($conex, $query);
 // if($resultado->num_rows){
 //     $errores[]="El usuario ya existe";
 // }
-
-
-
-

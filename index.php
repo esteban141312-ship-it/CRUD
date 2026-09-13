@@ -36,7 +36,7 @@ $dueño = obtener_usuarios();
         <label for="confcontraseña">Conf. Contraseña:</label>
         <input type="password" name="confcontraseña" id="confcontraseña" required><br>
         
-        <input type="submit" name="agregar" value="agregar" style="background-color: #28a745; color: white;">
+        <input type="submit" name="agregar" value="agregar">
     </form>
 
     <br>
@@ -52,11 +52,11 @@ $dueño = obtener_usuarios();
     <h1>Conexion con mysqli</h1>
 
     <?php
-    if ($dueño) {
-        while($user = mysqli_fetch_assoc($dueño)){
-            echo "<p><strong>Cédula:</strong> " . $user['cedula'] . " | <strong>Nombre:</strong> " . $user['nombre'] . " " . $user['apellido'] . " | <strong>Correo:</strong> " . $user['correo'] . " | <strong>Teléfono:</strong> " . $user['telefono'] . " | <strong>Contraseña:</strong> " . $user['contraseña'] . "</p>";
-        }
-    }
+    // if ($dueño) {
+    //     while($user = mysqli_fetch_assoc($dueño)){
+    //         echo "<p><strong>Cédula:</strong> " . $user['cedula'] . " | <strong>Nombre:</strong> " . $user['nombre'] . " " . $user['apellido'] . " | <strong>Correo:</strong> " . $user['correo'] . " | <strong>Teléfono:</strong> " . $user['telefono'] . " | <strong>Contraseña:</strong> " . $user['contraseña'] . "</p>";
+    //     }
+    // }
     ?>
 
 </body>
