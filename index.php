@@ -1,63 +1,115 @@
 <?php
-require './db/funciones.php';
+session_start();
+require "./db/conexion.php";
+require "./db/funciones.php";
 
-$adduser = create_user();
-$dueño = obtener_usuarios();
+// Procesar registro si se envió el formulario
+$adduser = create_user($conex);
+
+// Obtener usuarios si hay sesión activa
+$usuarios = null;
+if (isset($_SESSION['usuario'])) {
+    $usuarios = obtener_usuarios($conex);
+}
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Inicio</title>
 </head>
 <body>
-
-    <form action="index.php" method="POST" autocomplete="off">
-        <label for="nombre">Nombre:</label>
-        <input type="text" name="nombre" id="nombre" required><br>
-        
-        <label for="apellido">Apellido:</label>
-        <input type="text" name="apellido" id="apellido" required><br>
-        
-        <label for="cedula">Cédula:</label>
-        <input type="text" name="cedula" id="cedula" required><br>
-         
-        <label for="correo">Correo:</label>
-        <input type="text" name="correo" id="correo" required><br>
-         
-        <label for="telefono">Teléfono:</label>
-        <input type="text" name="telefono" id="telefono" required><br>
-         
-        <label for="contraseña">Contraseña:</label> 
-        <input type="password" name="contraseña" id="contraseña" required><br>
-        
-        <label for="confcontraseña">Conf. Contraseña:</label>
-        <input type="password" name="confcontraseña" id="confcontraseña" required><br>
-        
-        <input type="submit" name="agregar" value="agregar">
-    </form>
-
+<?php if (!isset($_SESSION['usuario'])): ?>
     <br>
+    <a href="formulario/FormLogin.php">Ir al Login</a>
+
+    <!-- formulario registro-->
+    <h2>Crear Usuario</h2>
+    <form action="index.php" method="POST" autocomplete="off">
+        <label>Nombre:</label>
+        <input type="text" name="nombre" required><br>
+
+        <label>Apellido:</label>
+        <input type="text" name="apellido" required><br>
+
+        <label>Cédula:</label>
+        <input type="text" name="cedula" required><br>
+
+        <label>Correo:</label>
+        <input type="email" name="correo" required><br>
+
+        <label>Teléfono:</label>
+        <input type="text" name="telefono" required><br>
+
+        <label>Contraseña:</label>
+        <input type="password" name="contraseña" required><br>
+
+        <label>Confirmar Contraseña:</label>
+        <input type="password" name="confcontraseña" required><br>
+
+        <input type="submit" name="agregar" value="Registrar">
+    </form>
 
     <?php
     if (!empty($adduser) && is_array($adduser)) {
         foreach ($adduser as $error){
-            echo "<p>" . $error . "</p>";
+            echo "<p style='color:red;'>$error</p>";
         }
     }
     ?>
 
-    <h1>Conexion con mysqli</h1>
+<?php else: ?>
+    <h1>Bienvenido, <?= $_SESSION['usuario'] ?></h1>
+    <a href="pag/CerrarSesion.php">Cerrar Sesión</a>
 
-    <?php
-    // if ($dueño) {
-    //     while($user = mysqli_fetch_assoc($dueño)){
-    //         echo "<p><strong>Cédula:</strong> " . $user['cedula'] . " | <strong>Nombre:</strong> " . $user['nombre'] . " " . $user['apellido'] . " | <strong>Correo:</strong> " . $user['correo'] . " | <strong>Teléfono:</strong> " . $user['telefono'] . " | <strong>Contraseña:</strong> " . $user['contraseña'] . "</p>";
-    //     }
-    // }
-    ?>
+    <!-- Botón para crear usuario dentro del panel -->
+    <h2>Acciones</h2>
+    <form action="index.php" method="POST" autocomplete="off">
+        <label>Nombre:</label>
+        <input type="text" name="nombre" required><br>
 
+        <label>Apellido:</label>
+        <input type="text" name="apellido" required><br>
+
+        <label>Cédula:</label>
+        <input type="text" name="cedula" required><br>
+
+        <label>Correo:</label>
+        <input type="email" name="correo" required><br>
+
+        <label>Teléfono:</label>
+        <input type="text" name="telefono" required><br>
+
+        <label>Contraseña:</label>
+        <input type="password" name="contraseña" required><br>
+
+        <label>Confirmar Contraseña:</label>
+        <input type="password" name="confcontraseña" required><br>
+
+        <input type="submit" name="agregar" value="Crear Usuario">
+    </form>
+
+    <h2>Lista de Usuarios</h2>
+    <table >
+        <tr>
+            <th>ID</th>
+            <th>Cédula</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+        </tr>
+        <?php while($u = mysqli_fetch_assoc($usuarios)): ?>
+            <tr>
+                <td><?= $u['id'] ?></td>
+                <td><?= $u['cedula'] ?></td>
+                <td><?= $u['nombre'] ?></td>
+                <td><?= $u['apellido'] ?></td>
+                <td><?= $u['correo'] ?></td>
+                <td><?= $u['celular'] ?></td>
+            </tr>
+        <?php endwhile; ?>
+    </table>
+<?php endif; ?>
 </body>
 </html>

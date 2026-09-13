@@ -1,83 +1,42 @@
 <?php
+require "conexion.php";
 
-function obtener_usuarios()
-{
-    try {
-        require "conexion.php";
-        $sql = "SELECT * FROM usuarios";
-        $query = mysqli_query($conex, $sql);
-
-        return $query;
-    } catch (\Throwable $th) {
-        var_dump($th);
-    }
-}
-
-
-function create_user()
-{
+function create_user($conex) {
     if (isset($_POST['agregar'])) {
-
-        require "conexion.php";
-
-        $nombre = $_POST["nombre"];
-        $apellido = $_POST["apellido"];
-        $cedula = $_POST["cedula"];
-        $correo = $_POST["correo"];
-        $telefono = $_POST["telefono"];
-        $contraseña = $_POST["contraseña"];
-        $comprobacion = $_POST["confcontraseña"];
+        $nombre = $_POST['nombre'];
+        $apellido = $_POST['apellido'];
+        $cedula = $_POST['cedula'];
+        $correo = $_POST['correo'];
+        $telefono = $_POST['telefono'];
+        $contraseña = $_POST['contraseña'];
+        $confcontraseña = $_POST['confcontraseña'];
 
         $errores = [];
 
-        if (!$cedula) {
-            $errores[] = "Ingrese el numero de cedula";
-        }
-
-        if (!$nombre) {
-            $errores[] = "Ingrese un nombre";
-        }
-
-        if (!$apellido) {
-            $errores[] = "Ingrese el apellido";
-        }
-
-        if (!$correo) {
-            $errores[] = "Ingrese el correo";
-        }
-
-        if (!$telefono) {
-            $errores[] = "Ingrese el numero de telefono";
-        }
-
-        if (!$contraseña) {
-            $errores[] = "Ingrese la contraseña";
-        }
-
-        if ($contraseña != $comprobacion) {
+        if ($contraseña !== $confcontraseña) {
             $errores[] = "Las contraseñas no coinciden";
-        } else {
-            $contraseña = password_hash($contraseña, PASSWORD_BCRYPT);
         }
 
         if (empty($errores)) {
+            // Encriptar contraseña antes de guardar
+            $hash = password_hash($contraseña, PASSWORD_DEFAULT);
 
-            $sql = "INSERT INTO usuarios 
-            (cedula, nombre, apellido, correo, contraseña, celular) 
-            VALUES 
-            ('$cedula', '$nombre', '$apellido', '$correo', '$contraseña', '$telefono')";
-
-            $query = mysqli_query($conex, $sql);
-
-            if ($query) {
-                header("Location: index.php");
-                exit;
-            }
-        } else {
-            return $errores;
+            $sql = "INSERT INTO usuarios (nombre, apellido, cedula, correo, celular, contraseña) 
+                    VALUES ('$nombre', '$apellido', '$cedula', '$correo', '$telefono', '$hash')";
+            mysqli_query($conex, $sql);
         }
+
+        return $errores;
     }
 }
+
+function obtener_usuarios($conex) {
+    $sql = "SELECT * FROM usuarios";
+    $resultado = mysqli_query($conex, $sql);
+    return $resultado; // 🔑 aquí devolvemos el resultado de la consulta
+}
+?>
+
 
 // $resultado = mysqli_query($conex, $query);
 // if($resultado->num_rows){
