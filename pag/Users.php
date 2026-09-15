@@ -33,7 +33,7 @@ $usuarios = obtener_usuarios($conex);
             <td><?= $usuar['apellido'] ?></td>
             <td><?= $usuar['correo'] ?></td>
             <td><?= $usuar['celular'] ?></td>
-            <td><a href="#">Eliminar</a></td>
+            <td><a href="EliminarUs.php">Eliminar</a><?php echo " || " ?><a href="EliminarUs.php">actualizar</a></td>
         </tr>
     <?php endwhile; ?>
 </table>
