@@ -6,7 +6,7 @@ if (isset($_POST['login'])) {
     $nombre = $_POST['nombre'];
     $contraseña = $_POST['contraseña'];
 
-    $sql = "SELECT * FROM usuarios WHERE nombre='$nombre' LIMIT 1";
+    $sql = "SELECT * FROM usuarios WHERE nombre='$nombre' ";
     $query = mysqli_query($conex, $sql);
     $user = mysqli_fetch_assoc($query);
 

@@ -12,7 +12,7 @@ $usuarios = obtener_usuarios($conex);
 ?>
 
 <h1>Lista de Usuarios</h1>
-<a href="../formulario/FormUsuarios.php">Agregar Usuario</a> | 
+<!-- <a href="../formulario/FormUsuarios.php">Agregar Usuario</a> |  -->
 <a href="CerrarSesion.php">Cerrar Sesión</a>
 
 <table>
@@ -33,7 +33,7 @@ $usuarios = obtener_usuarios($conex);
             <td><?= $usuar['apellido'] ?></td>
             <td><?= $usuar['correo'] ?></td>
             <td><?= $usuar['celular'] ?></td>
-            <td><a href="EliminarUs.php">Eliminar</a><?php echo " || " ?><a href="EliminarUs.php">actualizar</a></td>
+            <td><a href="../includes/users/EliminarUs.php">Eliminar</a><?php echo " || " ?><a href="../includes/users/Actualizar.php">actualizar</a></td>
         </tr>
     <?php endwhile; ?>
 </table>
