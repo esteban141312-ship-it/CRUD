@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Si ya hay sesión activa, redirigir al index
 if (isset($_SESSION['usuario'])) {
     header("Location: ../index.php");
     exit;
@@ -27,3 +26,5 @@ if (isset($_SESSION['usuario'])) {
     </form>
 </body>
 </html>
+
+<a href="../formulario/FormUsuarios.php">Agregar Usuario</a> | 

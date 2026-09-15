@@ -27,3 +27,4 @@ session_start();
 
     <input type="submit" name="agregar" value="Registrar">
 </form>
+<a href="FormLogin.php">iniciar sesion</a>

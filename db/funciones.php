@@ -33,12 +33,8 @@ function create_user($conex) {
 function obtener_usuarios($conex) {
     $sql = "SELECT * FROM usuarios";
     $resultado = mysqli_query($conex, $sql);
-    return $resultado; // 🔑 aquí devolvemos el resultado de la consulta
+    return $resultado; //consulta
 }
 ?>
 
 
-// $resultado = mysqli_query($conex, $query);
-// if($resultado->num_rows){
-//     $errores[]="El usuario ya existe";
-// }
